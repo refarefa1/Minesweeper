@@ -23,6 +23,19 @@ function renderBoard(mat, selector) {
     elContainer.innerHTML = strHTML
 }
 
+function renderCell(location, value) {
+    var cell = 'A'
+    var i = value.i
+    var j = value.j
+    if (gBoard[i][j].isMine) cell = MINE
+    else if (!gBoard[i][j].isMine) {
+        cell = setMinesNegsCount(gBoard, i, j)
+        gBoard[i][j].minesAroundCount = cell
+        if (!gBoard[i][j].minesAroundCount) cell = ''
+    }
+    location.innerHTML = cell
+}
+
 function setMinesNegsCount(board, rowIdx, colIdx) {
     var count = 0
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
@@ -67,11 +80,21 @@ function getNegs(board, rowIdx, colIdx) {
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
         if (i < 0 || i >= board.length) continue
         for (var j = colIdx - 1; j <= colIdx + 1; j++) {
-            if (i === rowIdx && j === colIdx) continue
             if (j < 0 || j >= board[0].length) continue
+            if (gBoard[i][j].isMarked) continue
+            if (gBoard[i][j].isShown) continue
             var currCell = board[i][j]
             if (currCell) negs.push({ i, j })
         }
     }
     return negs
+}
+
+function getCellCoord(strCellId) {
+    var coord = {}
+    var parts = strCellId.split('-')
+
+    coord.i = +parts[1]
+    coord.j = +parts[2]
+    return coord;
 }

@@ -1,6 +1,20 @@
 'use strict'
 
 const MINE = '💣'
+const FLAG = '🚩'
+
+const gLevel = {
+    SIZE: 4,
+    MINES: 2
+}
+
+const gGame = {
+    isOn: false,
+    isWin: false,
+    shownCount: 0,
+    markedCount: 0,
+    secsPassed: 0
+}
 
 var gBoard
 
@@ -8,17 +22,20 @@ function initGame() {
     gBoard = buildBoard(4)
     locateMinesRandomly(2)
     renderBoard(gBoard, '.table-container')
+
+    gGame.isOn = true
+    flagCell()
 }
 
-function buildBoard(num) {
+function buildBoard() {
     var board = []
-    for (var i = 0; i < num; i++) {
+    for (var i = 0; i < gLevel.SIZE; i++) {
         board[i] = []
-        for (var j = 0; j < num; j++) {
+        for (var j = 0; j < gLevel.SIZE; j++) {
             board[i][j] = {
                 isShown: false,
                 isMine: false,
-                // isMarked: false,
+                isMarked: false,
                 minesAroundCount: null
             }
         }
@@ -28,12 +45,16 @@ function buildBoard(num) {
 }
 
 function cellClicked(elCell, i, j) {
-    elCell.classList.add('shown')
-    gBoard[i][j].isShown = true
-    if (!elCell.innerHTML) {
-        expandCell(i, j)
+    if (!gGame.isOn) return
+    if (gBoard[i][j].isMarked) return
+    else if (!elCell.innerHTML) expandCell(i, j)
+    else if (elCell.innerHTML) {
+        elCell.classList.add('shown')
+        if (!gBoard[i][j].isShown) gGame.shownCount++
+        gBoard[i][j].isShown = true
+        if (gBoard[i][j].isMine) gameOver()
     }
-
+    isWin()
 }
 
 function expandCell(i, j) {
@@ -41,6 +62,7 @@ function expandCell(i, j) {
     for (var idx = 0; idx < negs.length; idx++) {
         const currNeg = negs[idx]
         const elCurrCell = document.querySelector(`.cell.cell-${currNeg.i}-${currNeg.j}`)
+        if (!gBoard[currNeg.i][currNeg.j].isShown) gGame.shownCount++
         gBoard[currNeg.i][currNeg.j].isShown = true
         elCurrCell.classList.add('shown')
     }
@@ -54,13 +76,75 @@ function locateMinesRandomly(minesNum) {
     }
 }
 
+function flagCell() {
+    const noRightClick = document.querySelector('.table-container');
+    noRightClick.addEventListener("contextmenu", e => e.preventDefault());
+    window.addEventListener('contextmenu', (event) => {
+        const cellClicked = event.target
+        const cellClass = cellClicked.classList[1]
+        const cellCoord = getCellCoord(cellClass)
+        if (gBoard[cellCoord.i][cellCoord.j].isShown) return
+        if (!gGame.isOn) return
+        if (event.button === 2) {
+            cellClicked.classList.toggle('flagged')
+            if (!gBoard[cellCoord.i][cellCoord.j].isMarked) {
+                cellClicked.innerText = FLAG
+                gGame.markedCount++
+                isWin()
+            } else {
+                renderCell(cellClicked, cellCoord)
+                gGame.markedCount--
+            }
+            gBoard[cellCoord.i][cellCoord.j].isMarked = !gBoard[cellCoord.i][cellCoord.j].isMarked
+        }
+    })
+}
+
+function gameOver() {
+    showAllCells()
+    gGame.isOn = false
+    gGame.shownCount = 0
+    gGame.markedCount = 0
+    var elSmiley = document.querySelector('.modal button')
+    elSmiley.innerText = gGame.isWin ? '😎' : '🤯'
+
+}
+
+function isWin() {
+    var shownCountNum = gLevel.SIZE ** 2 - gLevel.MINES
+    if (gGame.shownCount === shownCountNum && gGame.markedCount === gLevel.MINES) {
+        gGame.isWin = true
+        gameOver()
+    }
+}
+
+function onRestart(elBtn) {
+    initGame()
+    elBtn.innerText = '😃'
+}
+
+function showAllCells() {
+    for (var i = 0; i < gLevel.SIZE; i++) {
+        for (var j = 0; j < gLevel.SIZE; j++) {
+            const elCurrCell = document.querySelector(`.cell.cell-${i}-${j}`)
+            if (!elCurrCell.classList.contains('shown'))
+            elCurrCell.classList.add('shown')
+        }
+    }
+}
+
 
 
 /*
 
+BUGS :
 
+--- After restart flag wont work , only next time active
+
+--- Can see whats in the box from devtools
 
 */
+
 
 
 
