@@ -3,6 +3,12 @@ body {
     text-align: center;
     user-select: none;
     background-image: linear-gradient(#c9202e, #a61a26);
+    background-url: 
+}
+
+img {
+    width: 100%;
+    height: auto;
 }
 
 table {
