@@ -12,6 +12,8 @@ td {
     height: 50px;
     cursor: pointer;
     transition: 0.5s;
+    background-color: lightsalmon
+    
 }
 
 td:hover {
@@ -26,16 +28,6 @@ td:hover {
     cursor: pointer;
 }
 
-.flipped {
-    content-visibility: hidden;
-    background-color: lightsalmon
-}
-
 .shown {
-    content-visibility: initial;
     background-color: rgb(251, 126, 77)
-}
-
-.flagged {
-    content-visibility: initial;
 }

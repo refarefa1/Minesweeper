@@ -5,15 +5,8 @@ function renderBoard(mat, selector) {
     for (var i = 0; i < mat.length; i++) {
         strHTML += '<tr>'
         for (var j = 0; j < mat[0].length; j++) {
-            var cell = mat[i][j]
-            const className = 'cell cell-' + i + '-' + j + ' flipped'
-            if (mat[i][j].isMine) cell = MINE
-            else if (!mat[i][j].isMine) {
-                cell = setMinesNegsCount(mat, i, j)
-                gBoard[i][j].minesAroundCount = cell
-                if (!gBoard[i][j].minesAroundCount) cell = ''
-            }
-            strHTML += `<td onclick = "cellClicked(this,${i},${j})"class="${className}" >${cell}</td>`
+            const className = 'cell cell-' + i + '-' + j
+            strHTML += `<td onclick = "cellClicked(this,${i},${j})"class="${className}" ></td>`
         }
         strHTML += '</tr>'
     }

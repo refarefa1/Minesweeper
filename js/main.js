@@ -46,6 +46,7 @@ function buildBoard() {
 
 function cellClicked(elCell, i, j) {
     if (!gGame.isOn) return
+    renderCell(elCell, { i, j })
     if (gBoard[i][j].isMarked) return
     else if (!elCell.innerHTML) expandCell(i, j)
     else if (elCell.innerHTML) {
@@ -92,7 +93,7 @@ function flagCell() {
                 gGame.markedCount++
                 isWin()
             } else {
-                renderCell(cellClicked, cellCoord)
+                cellClicked.innerText = ''
                 gGame.markedCount--
             }
             gBoard[cellCoord.i][cellCoord.j].isMarked = !gBoard[cellCoord.i][cellCoord.j].isMarked
@@ -127,12 +128,13 @@ function showAllCells() {
     for (var i = 0; i < gLevel.SIZE; i++) {
         for (var j = 0; j < gLevel.SIZE; j++) {
             const elCurrCell = document.querySelector(`.cell.cell-${i}-${j}`)
-            if (!elCurrCell.classList.contains('shown'))
-            elCurrCell.classList.add('shown')
+            if (!elCurrCell.innerText) {
+                renderCell(elCurrCell, { i, j })
+                elCurrCell.classList.add('shown')
+            }
         }
     }
 }
-
 
 
 /*
