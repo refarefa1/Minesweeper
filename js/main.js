@@ -1,9 +1,11 @@
 'use strict'
 
 const MINE = '💣'
-const FLAG = '🚩'
+const FLAG = '🏳️'
 
 var gBoard
+var gIsGameStarted
+var gTimer
 
 const gLevel = {
     SIZE: 4,
@@ -18,13 +20,10 @@ const gGame = {
     secsPassed: 0
 }
 
-
-
 function initGame() {
-    gBoard = buildBoard(4)
-    locateMinesRandomly(2)
+    gBoard = buildBoard(gLevel.SIZE)
+    locateMinesRandomly(gLevel.MINES)
     renderBoard(gBoard, '.table-container')
-
     gGame.isOn = true
     flagCell()
 }
@@ -47,10 +46,12 @@ function buildBoard() {
 }
 
 function cellClicked(elCell, i, j) {
+    if (!gIsGameStarted) startTimer()
+    gIsGameStarted = true
     if (!gGame.isOn) return
-    renderCell(elCell, { i, j })
     if (gBoard[i][j].isMarked) return
-    else if (!elCell.innerHTML) expandCell(i, j)
+    renderCell(elCell, { i, j })
+    if (!elCell.innerHTML) expandCell(i, j)
     else if (elCell.innerHTML) {
         elCell.classList.add('shown')
         if (!gBoard[i][j].isShown) gGame.shownCount++
@@ -80,15 +81,14 @@ function locateMinesRandomly(minesNum) {
 }
 
 function flagCell() {
-    const noRightClick = document.querySelector('.table-container');
-    noRightClick.addEventListener("contextmenu", e => e.preventDefault());
-    window.addEventListener('contextmenu', (event) => {
-        const cellClicked = event.target
-        const cellClass = cellClicked.classList[1]
-        const cellCoord = getCellCoord(cellClass)
-        if (gBoard[cellCoord.i][cellCoord.j].isShown) return
-        if (!gGame.isOn) return
-        if (event.button === 2) {
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    var button = document.querySelector('table');
+    button.addEventListener('mouseup', (e) => {
+        const cellClicked = e.target
+        const cellCoord = getCellCoord(cellClicked.classList[1])
+        if (e.button === 2) {
+            if (gBoard[cellCoord.i][cellCoord.j].isShown) return
+            if (!gGame.isOn) return
             cellClicked.classList.toggle('flagged')
             if (!gBoard[cellCoord.i][cellCoord.j].isMarked) {
                 cellClicked.innerText = FLAG
@@ -100,15 +100,14 @@ function flagCell() {
             }
             gBoard[cellCoord.i][cellCoord.j].isMarked = !gBoard[cellCoord.i][cellCoord.j].isMarked
         }
-    })
+    });
 }
 
 function gameOver() {
     showAllCells()
     gGame.isOn = false
-    gGame.shownCount = 0
-    gGame.markedCount = 0
-    var elSmiley = document.querySelector('.modal button')
+    resetGame()
+    var elSmiley = document.querySelector('.smiley button')
     elSmiley.innerText = gGame.isWin ? '😎' : '🤯'
 
 }
@@ -123,6 +122,11 @@ function isWin() {
 
 function onRestart(elBtn) {
     initGame()
+    var elTimer = document.querySelector('.timer span')
+    gGame.secsPassed = 0
+    elTimer.innerText = gGame.secsPassed
+    clearInterval(gTimer)
+    gIsGameStarted = false
     elBtn.innerText = '😃'
 }
 
@@ -138,36 +142,24 @@ function showAllCells() {
     }
 }
 
+function chooseLevel(size, mines) {
+    gLevel.SIZE = size
+    gLevel.MINES = mines
+    var elTimer = document.querySelector('.timer span')
+    resetGame()
+    elTimer.innerText = gGame.secsPassed
+    document.querySelector('.smiley button').innerText = '😃'
+    initGame()
+}
 
-/*
+function resetGame() {
+    clearInterval(gTimer)
+    gIsGameStarted = false
+    gGame.secsPassed = 0
+    gGame.shownCount = 0
+    gGame.markedCount = 0
+}
 
-BUGS :
-
---- After restart flag wont work , only next time active
-
---- Can see whats in the box from devtools
-
+/* Bugs:
+---Right click is not only on td. is on whole table
 */
-
-
-
-
-
-// 3 levels of game
-//Beginner (4 * 4 with 2 MINES)
-// Medium (8 * 8 with 14 MINES)
-// Expert (12 * 12 with 32 MINES)
-
-// win when all mines are flagged and numbers are shown
-
-// lose at mine click
-
-// right click toggle flag
-
-// left click reveals
-// MINE – reveal the mine clicked
-// Cell with neighbors – reveal the cell alone
-// Cell without neighbors – expand it and its 1st degree neighbors
-
-
-// timer

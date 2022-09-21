@@ -91,3 +91,13 @@ function getCellCoord(strCellId) {
     coord.j = +parts[2]
     return coord;
 }
+
+function startTimer() {
+    gTimer = setInterval(countTime, 1000)
+}
+
+function countTime() {
+    var elTimer = document.querySelector('.timer span')
+    gGame.secsPassed++
+    elTimer.innerText = gGame.secsPassed
+}
