@@ -9,7 +9,8 @@ var gTimer
 
 const gLevel = {
     SIZE: 4,
-    MINES: 2
+    MINES: 2,
+    LIVES: 3
 }
 
 const gGame = {
@@ -21,6 +22,8 @@ const gGame = {
 }
 
 function initGame() {
+    gLevel.LIVES = 3
+    createLife()
     gBoard = buildBoard(gLevel.SIZE)
     locateMinesRandomly(gLevel.MINES)
     renderBoard(gBoard, '.table-container')
@@ -51,7 +54,12 @@ function cellClicked(elCell, i, j) {
     if (!gGame.isOn) return
     if (gBoard[i][j].isMarked) return
     renderCell(elCell, { i, j })
-    if (gBoard[i][j].isMine) gameOver()
+    if (gBoard[i][j].isMine) {
+        gLevel.LIVES--
+        createLife()
+        if (!gLevel.LIVES) gameOver()
+        return
+    }
     if (!gBoard[i][j].minesAroundCount) expandCell(i, j)
     else if (elCell.innerHTML) {
         elCell.classList.add('shown')
@@ -65,7 +73,6 @@ function expandCell(i, j) {
     var negs = getNegs(gBoard, i, j)
     for (var idx = 0; idx < negs.length; idx++) {
         const currNeg = negs[idx]
-        console.log(currNeg)
         const elCurrCell = document.querySelector(`.cell.cell-${currNeg.i}-${currNeg.j}`)
         if (!gBoard[currNeg.i][currNeg.j].isShown) gGame.shownCount++
         if (!gBoard[currNeg.i][currNeg.j].isMine) {
@@ -167,6 +174,17 @@ function resetGame() {
     gGame.shownCount = 0
     gGame.markedCount = 0
 }
+
+function createLife() {
+    var elLife = document.querySelector('.lives-left span')
+    var livesNum = gLevel.LIVES
+    var strHTML = ''
+    for (var i = 0; i < livesNum; i++) {
+        strHTML += '<img src="img/life.png" alt="life">'
+    }
+    elLife.innerHTML = strHTML
+}
+
 
 /* Bugs:
 ---Right click is not only on td. is on whole table

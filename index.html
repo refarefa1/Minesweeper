@@ -18,13 +18,14 @@
 
 <body onload="initGame()">
 
-    <div><img src="img/header.png" alt=""></div>
+    <div class="header"><img src="img/header.svg" alt="minesweeper"></div>
 
     <div class="modal">
         <button onclick="chooseLevel(4,2)">Easy</button>
         <button onclick="chooseLevel(8,12)">Medium</button>
         <button onclick="chooseLevel(12,32)">Hard</button>
     </div>
+    <div class="lives-left"><h2>----------------------------------------------<br><br><span></span><br><br>----------------------------------------------</h2></div>
     <div class="smiley">
         <button onclick="onRestart(this)"><span>😃</span></button>
     </div>

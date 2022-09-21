@@ -2,12 +2,24 @@ body {
     font-family: 'Raleway', sans-serif;
     text-align: center;
     user-select: none;
-    background-image: linear-gradient(#c9202e, #a61a26);
+    background-color: black;
 }
 
-img {
-    width: 100%;
+.header img {
+    min-width: 100px;
+    max-width: 700px;
     height: auto;
+    margin: 50px;
+}
+
+.lives-left {
+    line-height: 10px;
+    color: #60DC40;
+}
+
+.lives-left img {
+    max-width: 100px;
+    padding: 20px;
 }
 
 table {
@@ -19,14 +31,14 @@ td {
     height: 50px;
     cursor: pointer;
     transition: 0.5s;
-    background-color: #2fb2f7;
-    color: #a61a26;
+    background-color: #60DC40;
+    color: black;
     font-size: 25px;
     font-weight: 600;
 }
 
 td:hover {
-    background-color: #1b8dd0;
+    background-color: #3f9929;
 }
 
 .smiley button {
@@ -34,25 +46,26 @@ td:hover {
     font-size: 50px;
     margin: 10px;
     cursor: pointer;
-    background-color: #B6202B;
-    
+    background-color: black
 }
 
 .modal button {
     font-family: 'Permanent Marker', cursive;
     border: none;
-    background-color: #2fb2f7;
+    background-color: #60DC40;
     font-size: 25px;
-    width: 150px;
+    width: 135px;
     height: 50px;
-    color: #c9202e;
+    color: black;
     margin: 15px 10px;
     cursor: pointer;
     transition: 0.5s;
 }
 
 .modal button:hover {
-    background-color: #1b8dd0;
+    border: 3px #60DC40 dotted;
+    background-color: black;
+    color: #60DC40;
 }
 
 .timer {
@@ -62,5 +75,5 @@ td:hover {
 }
 
 .shown {
-    background-color: #1b8dd0;
+    background-color: #3f9929;
 }
