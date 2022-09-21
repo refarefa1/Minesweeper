@@ -3,6 +3,8 @@
 const MINE = '💣'
 const FLAG = '🚩'
 
+var gBoard
+
 const gLevel = {
     SIZE: 4,
     MINES: 2
@@ -16,7 +18,7 @@ const gGame = {
     secsPassed: 0
 }
 
-var gBoard
+
 
 function initGame() {
     gBoard = buildBoard(4)
