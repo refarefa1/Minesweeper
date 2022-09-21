@@ -7,7 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <title>Minesweeper</title>
@@ -15,19 +18,19 @@
 
 <body onload="initGame()">
 
-    <h1>Minesweeper</h1>
+    <div><img src="img/header2.png" alt=""></div>
 
     <div class="modal">
-        <button onclick = "chooseLevel(4,2)">Easy</button>
-        <button onclick = "chooseLevel(8,12)">Medium</button>
-        <button onclick = "chooseLevel(12,32)">Hard</button>
+        <button onclick="chooseLevel(4,2)">Easy</button>
+        <button onclick="chooseLevel(8,12)">Medium</button>
+        <button onclick="chooseLevel(12,32)">Hard</button>
     </div>
     <div class="smiley">
         <button onclick="onRestart(this)"><span>😃</span></button>
     </div>
     <div class="table-container"></div>
     <div class="timer">Time:<br><span>0</span></div>
-        
+
 
 
 

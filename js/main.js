@@ -80,22 +80,22 @@ function locateMinesRandomly(minesNum) {
     }
 }
 
-function flagCell() {
+function flagCell(elCell) {
     document.addEventListener('contextmenu', event => event.preventDefault());
     var button = document.querySelector('table');
     button.addEventListener('mouseup', (e) => {
-        const cellClicked = e.target
-        const cellCoord = getCellCoord(cellClicked.classList[1])
+        elCell = e.target
         if (e.button === 2) {
+            const cellCoord = getCellCoord(elCell.classList[1])
             if (gBoard[cellCoord.i][cellCoord.j].isShown) return
             if (!gGame.isOn) return
-            cellClicked.classList.toggle('flagged')
+            elCell.classList.toggle('flagged')
             if (!gBoard[cellCoord.i][cellCoord.j].isMarked) {
-                cellClicked.innerText = FLAG
+                elCell.innerText = FLAG
                 gGame.markedCount++
                 isWin()
             } else {
-                cellClicked.innerText = ''
+                elCell.innerText = ''
                 gGame.markedCount--
             }
             gBoard[cellCoord.i][cellCoord.j].isMarked = !gBoard[cellCoord.i][cellCoord.j].isMarked

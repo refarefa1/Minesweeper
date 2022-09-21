@@ -2,6 +2,7 @@ body {
     font-family: 'Raleway', sans-serif;
     text-align: center;
     user-select: none;
+    background-image: linear-gradient(#c9202e, #a61a26);
 }
 
 table {
@@ -13,47 +14,48 @@ td {
     height: 50px;
     cursor: pointer;
     transition: 0.5s;
-    background-color: lightsalmon;
+    background-color: #2fb2f7;
+    color: #a61a26;
     font-size: 25px;
-    
-    
+    font-weight: 600;
 }
 
 td:hover {
-    background-color: rgb(251, 126, 77)
+    background-color: #1b8dd0;
 }
 
 .smiley button {
     border: none;
-    background-color: white;
     font-size: 50px;
     margin: 10px;
     cursor: pointer;
+    background-color: #B6202B;
+    
 }
 
 .modal button {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Permanent Marker', cursive;
     border: none;
-    background-color: white;
-    font-size: 15px;
-    font-weight: 500;
-    width: 100px;
-    height: 40px;
-    background-color: lightsalmon;
+    background-color: #2fb2f7;
+    font-size: 25px;
+    width: 150px;
+    height: 50px;
+    color: #c9202e;
     margin: 15px 10px;
     cursor: pointer;
     transition: 0.5s;
 }
 
+.modal button:hover {
+    background-color: #1b8dd0;
+}
+
 .timer {
     font-size: 40px;
     margin: 20px;
-}
-
-.modal button:hover {
-    background-color: rgb(251, 126, 77)
+    color: white;
 }
 
 .shown {
-    background-color: rgb(251, 126, 77)
+    background-color: #1b8dd0;
 }
