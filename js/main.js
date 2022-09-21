@@ -67,6 +67,7 @@ function expandCell(i, j) {
         const currNeg = negs[idx]
         const elCurrCell = document.querySelector(`.cell.cell-${currNeg.i}-${currNeg.j}`)
         if (!gBoard[currNeg.i][currNeg.j].isShown) gGame.shownCount++
+        renderCell(elCurrCell, { i: currNeg.i, j: currNeg.j })
         gBoard[currNeg.i][currNeg.j].isShown = true
         elCurrCell.classList.add('shown')
     }
