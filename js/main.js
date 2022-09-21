@@ -51,12 +51,12 @@ function cellClicked(elCell, i, j) {
     if (!gGame.isOn) return
     if (gBoard[i][j].isMarked) return
     renderCell(elCell, { i, j })
-    if (!elCell.innerHTML) expandCell(i, j)
+    if (gBoard[i][j].isMine) gameOver()
+    if (!gBoard[i][j].minesAroundCount) expandCell(i, j)
     else if (elCell.innerHTML) {
         elCell.classList.add('shown')
         if (!gBoard[i][j].isShown) gGame.shownCount++
         gBoard[i][j].isShown = true
-        if (gBoard[i][j].isMine) gameOver()
     }
     isWin()
 }
@@ -65,11 +65,18 @@ function expandCell(i, j) {
     var negs = getNegs(gBoard, i, j)
     for (var idx = 0; idx < negs.length; idx++) {
         const currNeg = negs[idx]
+        console.log(currNeg)
         const elCurrCell = document.querySelector(`.cell.cell-${currNeg.i}-${currNeg.j}`)
         if (!gBoard[currNeg.i][currNeg.j].isShown) gGame.shownCount++
-        renderCell(elCurrCell, { i: currNeg.i, j: currNeg.j })
-        gBoard[currNeg.i][currNeg.j].isShown = true
-        elCurrCell.classList.add('shown')
+        if (!gBoard[currNeg.i][currNeg.j].isMine) {
+            renderCell(elCurrCell, { i: currNeg.i, j: currNeg.j })
+            gBoard[currNeg.i][currNeg.j].isShown = true
+            elCurrCell.classList.add('shown')
+            if (currNeg && !gBoard[currNeg.i][currNeg.j].minesAroundCount) {
+                expandCell(currNeg.i, currNeg.j)
+            }
+        }
+
     }
 }
 
