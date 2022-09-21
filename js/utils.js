@@ -5,9 +5,15 @@ function renderBoard(mat, selector) {
     for (var i = 0; i < mat.length; i++) {
         strHTML += '<tr>'
         for (var j = 0; j < mat[0].length; j++) {
-            const cell = mat[i][j]
-            const className = 'cell cell-' + i + '-' + j
-            strHTML += `<td class="${className}">${cell}</td>`
+            var cell = mat[i][j]
+            const className = 'cell cell-' + i + '-' + j + ' flipped'
+            if (mat[i][j].isMine) cell = MINE
+            else if (!mat[i][j].isMine) {
+                cell = setMinesNegsCount(mat, i, j)
+                gBoard[i][j].minesAroundCount = cell
+                if (!gBoard[i][j].minesAroundCount) cell = ''
+            }
+            strHTML += `<td onclick = "cellClicked(this,${i},${j})"class="${className}" >${cell}</td>`
         }
         strHTML += '</tr>'
     }
@@ -17,7 +23,7 @@ function renderBoard(mat, selector) {
     elContainer.innerHTML = strHTML
 }
 
-function countNegs(board, rowIdx, colIdx) {
+function setMinesNegsCount(board, rowIdx, colIdx) {
     var count = 0
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
         if (i < 0 || i >= board.length) continue
@@ -25,7 +31,7 @@ function countNegs(board, rowIdx, colIdx) {
             if (i === rowIdx && j === colIdx) continue
             if (j < 0 || j >= board[0].length) continue
             var currCell = board[i][j]
-            if (currCell.isActive) count++
+            if (currCell.isMine) count++
         }
     }
     return count
@@ -35,7 +41,7 @@ function findEmptyPos(mat) {
     var emptyPos = []
     for (var i = 0; i < mat.length; i++) {
         for (var j = 0; j < mat[0].length; j++) {
-            if (!mat[i][j])
+            if (!mat[i][j].isMine)
                 emptyPos.push({ i: i, j: j })
         }
     } return emptyPos
@@ -54,4 +60,18 @@ function getRandomColor() {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
+}
+
+function getNegs(board, rowIdx, colIdx) {
+    var negs = []
+    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+        if (i < 0 || i >= board.length) continue
+        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+            if (i === rowIdx && j === colIdx) continue
+            if (j < 0 || j >= board[0].length) continue
+            var currCell = board[i][j]
+            if (currCell) negs.push({ i, j })
+        }
+    }
+    return negs
 }
