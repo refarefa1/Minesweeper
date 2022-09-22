@@ -217,7 +217,7 @@ function createHints() {
     var elHints = document.querySelector('.hints-number')
     var strHTML = ''
     for (var i = 0; i < gLevel.HINTS; i++) {
-        strHTML += '<img onclick="onHint(this) "src="/img/hint.svg" alt="hint">'
+        strHTML += '<img onclick="onHint(this) "src="img/hint.svg" alt="hint">'
     }
     elHints.innerHTML = strHTML
 }
