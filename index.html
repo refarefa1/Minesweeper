@@ -29,7 +29,6 @@
         <button onclick="chooseLevel(12,32)">Hard</button>
     </div>
     <div class="hints">
-        <button onclick ="safeClick(this)">Safe<br>click:<br><span class="safe-number">3</span></button>
         <span class="hints-number"></span>
     </div>
     </div>
@@ -38,9 +37,16 @@
         <h2>--------------------------------------<br><br><span></span><br><br>--------------------------------------
         </h2>
     </div>
+
+    <div class = "features">
+        <button class = "safe-click" onclick="safeClick(this)">Safe<br>click:<br><span class="safe-number">3</span></button>
+        <button class = "create-mines" onclick="positionMinesManually()">Position<br>mines<br>manually</button>
+    </div>
+
     <div class="smiley">
         <button onclick="onRestart(this)"><span>😃</span></button>
     </div>
+
     <div class="table-container"></div>
 
     <div class="best-score">
@@ -53,6 +59,7 @@
 
 
     <script src="js/utils.js"></script>
+    <script src="js/features.js"></script>
     <script src="js/main.js"></script>
 
 </body>

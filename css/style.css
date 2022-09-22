@@ -4,57 +4,44 @@ body {
     background-color: black;
 }
 
+.header img {
+    min-width: 100px;
+    max-width: 700px;
+    height: auto;
+    margin: 20px auto 10px auto;
+}
+
 p {
     color: white;
 }
 
-.hints {
-    display: flex;
-    align-items: center;
-    margin: auto;
-    justify-content: center
-}
-
-.hints span {
-    padding: 10px;
-}
-
 .hints img {
     width: 40px;
-    padding-left: 20px;
+    padding: 0px 20px;
     cursor: pointer;
     margin: 0px;
     transition: 0.5s;
-    vertical-align: middle;
 }
 
 .hints img:hover {
     scale: 1.2;
 }
 
-.hints button {
+.features button {
     font-family: 'VT323', monospace;
     font-size: 30px;
+    width: 150px;
     background-color: #60DC40;
-    padding: 10px 25px;
+    padding: 10px;
     margin-top: 15px;
-    margin-bottom: 15px;
     cursor: pointer;
     transition: 0.5s;
 }
 
-.hints button:hover {
+.features button:hover {
     border: 3px #60DC40 dotted;
     background-color: black;
     color: #60DC40;
-}
-
-
-.header img {
-    min-width: 100px;
-    max-width: 700px;
-    height: auto;
-    margin: 50px;
 }
 
 h2 {
