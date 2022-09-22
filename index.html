@@ -10,8 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&family=VT323&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <title>Minesweeper</title>
@@ -26,13 +28,27 @@
         <button onclick="chooseLevel(8,12)">Medium</button>
         <button onclick="chooseLevel(12,32)">Hard</button>
     </div>
-    <div class="hints"></div>
-    <div class="lives-left"><h2>--------------------------------------<br><br><span></span><br><br>--------------------------------------</h2></div>
+    <div class="hints">
+        <button onclick ="safeClick(this)">Safe<br>click:<br><span class="safe-number">3</span></button>
+        <span class="hints-number"></span>
+    </div>
+    </div>
+
+    <div class="lives-left">
+        <h2>--------------------------------------<br><br><span></span><br><br>--------------------------------------
+        </h2>
+    </div>
     <div class="smiley">
         <button onclick="onRestart(this)"><span>😃</span></button>
     </div>
     <div class="table-container"></div>
-    <div class="timer">Time:<br><span>0</span></div>
+
+    <div class="best-score">
+        <div class="timer">Time:<span>0</span></div>
+        <div class="best">
+            Best: <span>0</span>
+        </div>
+    </div>
 
 
 

@@ -1,16 +1,54 @@
 body {
-    font-family: 'Raleway', sans-serif;
     text-align: center;
     user-select: none;
     background-color: black;
 }
 
+p {
+    color: white;
+}
+
+.hints {
+    display: flex;
+    align-items: center;
+    margin: auto;
+    justify-content: center
+}
+
+.hints span {
+    padding: 10px;
+}
+
 .hints img {
     width: 40px;
-    padding: 20px;
+    padding-left: 20px;
     cursor: pointer;
     margin: 0px;
+    transition: 0.5s;
+    vertical-align: middle;
 }
+
+.hints img:hover {
+    scale: 1.2;
+}
+
+.hints button {
+    font-family: 'VT323', monospace;
+    font-size: 30px;
+    background-color: #60DC40;
+    padding: 10px 25px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.hints button:hover {
+    border: 3px #60DC40 dotted;
+    background-color: black;
+    color: #60DC40;
+}
+
 
 .header img {
     min-width: 100px;
@@ -24,13 +62,15 @@ h2 {
 }
 
 .lives-left {
-    line-height: 5px;
+    line-height: 20px;
     color: #60DC40;
+    margin: 0px;
 }
 
+
 .lives-left img {
-    max-width: 50px;
-    padding: 20px;
+    max-width: 60px;
+    padding: 0px 30px;
 }
 
 table {
@@ -38,6 +78,7 @@ table {
 }
 
 td {
+    font-family: 'VT323', monospace;
     width: 50px;
     height: 50px;
     cursor: pointer;
@@ -61,10 +102,10 @@ td:hover {
 }
 
 .modal button {
-    font-family: 'Permanent Marker', cursive;
+    font-family: 'VT323', monospace;
     border: none;
     background-color: #60DC40;
-    font-size: 25px;
+    font-size: 35px;
     width: 135px;
     height: 50px;
     color: black;
@@ -79,10 +120,12 @@ td:hover {
     color: #60DC40;
 }
 
-.timer {
-    font-size: 40px;
-    margin: 20px;
+.best-score {
+    font-family: 'VT323', monospace;
     color: white;
+    font-size: 50px;
+    margin: 20px;
+    line-height: 40px;
 }
 
 .shown {
