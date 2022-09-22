@@ -17,7 +17,8 @@ function renderBoard(mat, selector) {
 }
 
 function renderCell(location, value) {
-    var cell = 'A'
+    var cell = ''
+    var negsNum
     var i = value.i
     var j = value.j
     if (gBoard[i][j].isMine) cell = MINE
@@ -27,6 +28,11 @@ function renderCell(location, value) {
         if (!gBoard[i][j].minesAroundCount) cell = ''
     }
     location.innerHTML = cell
+}
+
+function unRenderCell(cell){
+    cell.innerHTML = ''
+    cell.classList.remove('shown')
 }
 
 function setMinesNegsCount(board, rowIdx, colIdx) {
@@ -43,11 +49,13 @@ function setMinesNegsCount(board, rowIdx, colIdx) {
     return count
 }
 
+// added is not shown find empty pos
+
 function findEmptyPos(mat) {
     var emptyPos = []
     for (var i = 0; i < mat.length; i++) {
         for (var j = 0; j < mat[0].length; j++) {
-            if (!mat[i][j].isMine)
+            if (!mat[i][j].isMine && !mat[i][j].isShown)
                 emptyPos.push({ i: i, j: j })
         }
     } return emptyPos
@@ -74,6 +82,7 @@ function getNegs(board, rowIdx, colIdx) {
         if (i < 0 || i >= board.length) continue
         for (var j = colIdx - 1; j <= colIdx + 1; j++) {
             if (j < 0 || j >= board[0].length) continue
+            if (i === rowIdx && j === colIdx) continue
             if (gBoard[i][j].isMarked) continue
             if (gBoard[i][j].isShown) continue
             var currCell = board[i][j]

@@ -6,11 +6,14 @@ const FLAG = '🏳️'
 var gBoard
 var gIsGameStarted
 var gTimer
+var gIsHint = false
+var gElHint
 
 const gLevel = {
     SIZE: 4,
     MINES: 2,
-    LIVES: 3
+    LIVES: 3,
+    HINTS: 3
 }
 
 const gGame = {
@@ -23,7 +26,9 @@ const gGame = {
 
 function initGame() {
     gLevel.LIVES = 3
+    gLevel.HINTS = 3
     createLife()
+    createHints()
     gBoard = buildBoard(gLevel.SIZE)
     locateMinesRandomly(gLevel.MINES)
     renderBoard(gBoard, '.table-container')
@@ -51,6 +56,10 @@ function buildBoard() {
 function cellClicked(elCell, i, j) {
     if (!gIsGameStarted) startTimer()
     gIsGameStarted = true
+    if (gIsHint) {
+        actHint(gBoard, i, j)
+        return
+    }
     if (!gGame.isOn) return
     if (gBoard[i][j].isMarked) return
     renderCell(elCell, { i, j })
@@ -177,15 +186,43 @@ function resetGame() {
 
 function createLife() {
     var elLife = document.querySelector('.lives-left span')
-    var livesNum = gLevel.LIVES
     var strHTML = ''
-    for (var i = 0; i < livesNum; i++) {
+    for (var i = 0; i < gLevel.LIVES; i++) {
         strHTML += '<img src="img/life.png" alt="life">'
     }
     elLife.innerHTML = strHTML
 }
 
+function createHints() {
+    var elHints = document.querySelector('.hints')
+    var strHTML = ''
+    for (var i = 0; i < gLevel.HINTS; i++) {
+        strHTML += '<img onclick="onHint(this) "src="/img/hint.svg" alt="hint">'
+    }
+    elHints.innerHTML = strHTML
+}
+
+function onHint(elBtn) {
+    elBtn.style.scale = 1.2
+    // elBtn.style.visibility = 'hidden'
+    gLevel.HINTS--
+    gIsHint = true
+    gElHint = elBtn
+}
+
+function actHint(board, i, j) {
+    gElHint.style.visibility = 'hidden'
+    var negs = getNegs(board, i, j)
+    gIsHint = false
+    for (var idx = 0; idx < negs.length; idx++) {
+        var currCell = document.querySelector(`.cell.cell-${negs[idx].i}-${negs[idx].j}`)
+        currCell.classList.add('shown')
+        renderCell(currCell, { i: negs[idx].i, j: negs[idx].j })
+        setTimeout(unRenderCell, 1000, currCell)
+    }
+}
 
 /* Bugs:
+
 ---Right click is not only on td. is on whole table
 */
