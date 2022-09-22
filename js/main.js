@@ -11,6 +11,10 @@ var gElHint
 var gIsMinesManual
 var gMines = 0
 var gMinesLoc = []
+var input
+var oldState = []
+var gIsWhiteMode = false
+
 
 const gLevel = {
     SIZE: 4,
@@ -59,7 +63,6 @@ function placeMines() {
         setTimeout(backButtonStyle, 1000)
     }
 }
-
 
 function buildBoard() {
     var board = []
@@ -163,7 +166,11 @@ function flagCell(elCell) {
                 gGame.markedCount++
                 isWin()
             } else {
-                renderCell(elCell, cellCoord)
+                if (gBoard[cellCoord.i][cellCoord.j].isShown) {
+                    renderCell(elCell, cellCoord)
+                } else {
+                    elCell.innerHTML = ''
+                }
                 gGame.markedCount--
             }
             gBoard[cellCoord.i][cellCoord.j].isMarked = !gBoard[cellCoord.i][cellCoord.j].isMarked
@@ -230,12 +237,16 @@ function resetGame() {
     gGame.markedCount = 0
 }
 
-/* Bugs:
+/* Left to do:
 
---- table moves when lives are over
+-- Undo
 
----Right click is not only on td. is on whole table
+-- First cell is not a mine
 
--- couldnt make first click not mine , something is bugged
+-- 7BOOM
+
+-- Megahint
+
+-- MINE EXTERMINATOR
 
 */

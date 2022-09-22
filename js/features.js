@@ -82,3 +82,14 @@ function backButtonStyle() {
     elButton.style.backgroundColor = '#60DC40'
     elButton.style.color = 'black'
 }
+
+function whiteMode(elBtn) {
+    gIsWhiteMode = !gIsWhiteMode
+    elBtn.innerText = gIsWhiteMode ? 'Play \n black \n mode' : 'Play \n white \n mode'
+    var elBody = document.querySelector('body')
+    elBody.style.backgroundColor = gIsWhiteMode ? '#e8ffd1' : 'black'
+    var elSmiley = document.querySelector('.smiley button')
+    elSmiley.style.backgroundColor = gIsWhiteMode ? '#e8ffd1' : 'black'
+    var elScore = document.querySelector('.best-score')
+    elScore.style.color = gIsWhiteMode ? 'black' : 'white'
+}

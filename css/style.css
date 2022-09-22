@@ -31,17 +31,22 @@ p {
     font-family: 'VT323', monospace;
     font-size: 30px;
     width: 150px;
+    height: 100px;
     background-color: #60DC40;
-    padding: 10px;
     margin-top: 15px;
     cursor: pointer;
     transition: 0.5s;
+    border: none;
 }
 
 .features button:hover {
     border: 3px #60DC40 dotted;
     background-color: black;
     color: #60DC40;
+}
+
+.white-mode span{
+    font-size: 15px;
 }
 
 h2 {
