@@ -71,16 +71,13 @@ function positionMinesManually(elCell, i, j) {
     gIsMinesManual = true
     gGame.isOn = false
     var elButton = document.querySelector('.create-mines')
-    elButton.style.border = '3px #60DC40 dotted'
-    elButton.style.backgroundColor = 'black'
-    elButton.style.color = '#60DC40'
+    elButton.classList.add('clicked')
 }
 
 function backButtonStyle() {
     var elButton = document.querySelector('.create-mines')
-    elButton.style.border = 'none'
-    elButton.style.backgroundColor = '#60DC40'
-    elButton.style.color = 'black'
+    elButton.classList.remove('clicked')
+
 }
 
 function whiteMode(elBtn) {
@@ -93,3 +90,36 @@ function whiteMode(elBtn) {
     var elScore = document.querySelector('.best-score')
     elScore.style.color = gIsWhiteMode ? 'black' : 'white'
 }
+
+function megaHint() {
+    if (!gLevel.MEGAHINT) return
+    var elButton = document.querySelector('.mega-hint')
+    elButton.classList.add('clicked')
+    gIsMegaHint = true
+    gGame.isOn = false
+
+}
+
+function actMegaHint(elCurrCell) {
+    for (var rowIdx = megaHints[0].i; rowIdx <= megaHints[1].i; rowIdx++) {
+        for (var colIdx = megaHints[0].j; colIdx <= megaHints[1].j; colIdx++) {
+            elCurrCell = document.querySelector(`.cell.cell-${rowIdx}-${colIdx}`)
+            if (gBoard[rowIdx][colIdx].isShown) continue
+            elCurrCell.classList.add('shown')
+            renderCell(elCurrCell, { i: rowIdx, j: colIdx })
+            setTimeout(unRenderCell, 1500, elCurrCell)
+            setTimeout(resetMegaHint, 1500)
+        }
+    } gLevel.MEGAHINT--
+}
+
+function resetMegaHint() {
+    var elButton = document.querySelector('.mega-hint')
+    elButton.classList.remove('clicked')
+    var elButtonSpan = document.querySelector('.mega-hint span')
+    elButtonSpan.innerText = gLevel.MEGAHINT
+    gIsMegaHint = false
+    gGame.isOn = true
+    megaHints = []
+}
+

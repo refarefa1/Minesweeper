@@ -13,14 +13,16 @@ var gMines = 0
 var gMinesLoc = []
 var input
 var oldState = []
-var gIsWhiteMode = false
-
+var gIsWhiteMode
+var gIsMegaHint
+var megaHints = []
 
 const gLevel = {
     SIZE: 4,
     MINES: 2,
     LIVES: 3,
     HINTS: 3,
+    MEGAHINT: 1,
     SAFE: 3
 }
 
@@ -37,6 +39,7 @@ function initGame() {
     gLevel.LIVES = 3
     gLevel.HINTS = 3
     gLevel.SAFE = 3
+    gLevel.MEGAHINT = 1
     gGame.secsPassed = 0
     gMinesLoc = []
     gMines = 0
@@ -44,6 +47,7 @@ function initGame() {
     gIsGameStarted = false
     createLife()
     resetSafe()
+    resetMegaHint()
     createHints()
     gBoard = buildBoard(gLevel.SIZE)
     locateMinesRandomly(gLevel.MINES)
@@ -83,7 +87,6 @@ function buildBoard() {
 
 function cellClicked(elCell, i, j) {
     if (gIsMinesManual) {
-
         gBoard = buildBoard(gLevel.SIZE)
         positionMinesManually(elCell, i, j)
         if (gMines <= gLevel.MINES) {
@@ -96,9 +99,20 @@ function cellClicked(elCell, i, j) {
             }
         }
     }
+    if (gIsMegaHint && gLevel.MEGAHINT) {
+        megaHints.push({ i, j })
+        if (megaHints.length === 2) {
+            actMegaHint()
+            return
+        }
+    }
     if (!gGame.isOn) return
     if (!gIsGameStarted) {
         startTimer()
+        while (gBoard[i][j].isMine) {
+            console.log('mine!')
+            initGame()
+        }
     }
     gIsGameStarted = true
     if (gIsHint) {
@@ -117,10 +131,11 @@ function cellClicked(elCell, i, j) {
     }
     if (!gBoard[i][j].minesAroundCount) expandCell(i, j)
     else {
-        elCell.classList.add('shown')
-        gGame.shownCount++
+        const elCurrCell = document.querySelector(`.cell.cell-${i}-${j}`)
+        renderCell(elCurrCell, { i, j })
         gBoard[i][j].isShown = true
-
+        elCurrCell.classList.add('shown')
+        gGame.shownCount++
     }
     isWin()
 }
@@ -241,11 +256,7 @@ function resetGame() {
 
 -- Undo
 
--- First cell is not a mine
-
 -- 7BOOM
-
--- Megahint
 
 -- MINE EXTERMINATOR
 

@@ -36,7 +36,7 @@ p {
     margin-top: 15px;
     cursor: pointer;
     transition: 0.5s;
-    border: none;
+    border: 0px;
 }
 
 .features button:hover {
@@ -45,7 +45,7 @@ p {
     color: #60DC40;
 }
 
-.white-mode span{
+.white-mode span {
     font-size: 15px;
 }
 
@@ -122,4 +122,10 @@ td:hover {
 
 .shown {
     background-color: #3f9929;
+}
+
+.features .clicked{
+    border: 3px #60DC40 dotted;
+    background-color: black;
+    color: #60DC40;
 }
