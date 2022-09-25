@@ -16,6 +16,10 @@ var oldState = []
 var gIsWhiteMode
 var gIsMegaHint
 var megaHints = []
+var moves = []
+var lastMove = []
+var expandMoves = []
+
 
 const gLevel = {
     SIZE: 4,
@@ -41,7 +45,9 @@ function initGame() {
     gLevel.SAFE = 3
     gLevel.MEGAHINT = 1
     gGame.secsPassed = 0
+    expandMoves = []
     gMinesLoc = []
+    moves = []
     gMines = 0
     gGame.isWin = false
     gIsGameStarted = false
@@ -54,18 +60,6 @@ function initGame() {
     renderBoard(gBoard, '.table-container')
     gGame.isOn = true
     flagCell()
-}
-
-function placeMines() {
-    gIsMinesManual = false
-    gGame.isOn = true
-    for (var idx = 0; idx < gLevel.MINES; idx++) {
-        const currMine = gMinesLoc[idx]
-        gBoard[currMine.i][currMine.j].isMine = true
-        var currCell = document.querySelector(`.cell.cell-${currMine.i}-${currMine.j}`)
-        setTimeout(unRenderCell, 1000, currCell)
-        setTimeout(backButtonStyle, 1000)
-    }
 }
 
 function buildBoard() {
@@ -101,18 +95,12 @@ function cellClicked(elCell, i, j) {
     }
     if (gIsMegaHint && gLevel.MEGAHINT) {
         megaHints.push({ i, j })
-        if (megaHints.length === 2) {
-            actMegaHint()
-            return
-        }
+        if (megaHints.length === 2) actMegaHint()
     }
     if (!gGame.isOn) return
     if (!gIsGameStarted) {
         startTimer()
-        while (gBoard[i][j].isMine) {
-            console.log('mine!')
-            initGame()
-        }
+        while (gBoard[i][j].isMine) initGame()
     }
     gIsGameStarted = true
     if (gIsHint) {
@@ -122,6 +110,8 @@ function cellClicked(elCell, i, j) {
     if (gBoard[i][j].isMarked) return
     renderCell(elCell, { i, j })
     if (gBoard[i][j].isMine) {
+        getIdx(i, j)
+        pushIdx()
         gBoard[i][j].isShown = true
         elCell.classList.add('shown')
         gLevel.LIVES--
@@ -129,10 +119,17 @@ function cellClicked(elCell, i, j) {
         if (!gLevel.LIVES) gameOver()
         return
     }
-    if (!gBoard[i][j].minesAroundCount) expandCell(i, j)
+    if (!gBoard[i][j].minesAroundCount) {
+        expandCell(i, j)
+        moves.push(expandMoves.splice(0, expandMoves.length - 1))
+        expandMoves = []
+        lastMove = []
+    }
     else {
         const elCurrCell = document.querySelector(`.cell.cell-${i}-${j}`)
         renderCell(elCurrCell, { i, j })
+        getIdx(i, j)
+        pushIdx()
         gBoard[i][j].isShown = true
         elCurrCell.classList.add('shown')
         gGame.shownCount++
@@ -148,13 +145,15 @@ function expandCell(i, j) {
         if (!gBoard[currNeg.i][currNeg.j].isShown) gGame.shownCount++
         if (!gBoard[currNeg.i][currNeg.j].isMine) {
             renderCell(elCurrCell, { i: currNeg.i, j: currNeg.j })
+            expandMoves.push({ i: currNeg.i, j: currNeg.j })
             gBoard[currNeg.i][currNeg.j].isShown = true
             elCurrCell.classList.add('shown')
             if (currNeg && !gBoard[currNeg.i][currNeg.j].minesAroundCount) {
                 expandCell(currNeg.i, currNeg.j)
+
             }
         }
-
+        getIdx(i, j)
     }
 }
 
@@ -253,8 +252,6 @@ function resetGame() {
 }
 
 /* Left to do:
-
--- Undo
 
 -- 7BOOM
 

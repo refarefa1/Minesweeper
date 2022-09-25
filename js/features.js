@@ -1,5 +1,6 @@
 'use strict'
 
+
 function createLife() {
     var elLife = document.querySelector('.lives-left span')
     var strHTML = ''
@@ -35,7 +36,7 @@ function actHint(board, i, j) {
         currCell.classList.add('shown')
         renderCell(currCell, { i: negs[idx].i, j: negs[idx].j })
         setTimeout(unRenderCell, 1000, currCell)
-    }
+    } if (megaHints.length === 2) return
 }
 
 function bestScore() {
@@ -123,3 +124,42 @@ function resetMegaHint() {
     megaHints = []
 }
 
+function placeMines() {
+    gIsMinesManual = false
+    gGame.isOn = true
+    for (var idx = 0; idx < gLevel.MINES; idx++) {
+        const currMine = gMinesLoc[idx]
+        gBoard[currMine.i][currMine.j].isMine = true
+        var currCell = document.querySelector(`.cell.cell-${currMine.i}-${currMine.j}`)
+        setTimeout(unRenderCell, 1000, currCell)
+        setTimeout(backButtonStyle, 1000)
+    }
+}
+
+function pushIdx() {
+    moves.push(lastMove.splice(0, lastMove.length))
+    return moves
+}
+
+function getIdx(row, col) {
+    lastMove.push({ i: row, j: col })
+    return lastMove
+}
+
+function undo() {
+    var lastMoves = moves.splice(moves.length - 1, 1)
+    for (var idx = 0; idx < lastMoves[0].length; idx++) {
+        const currMove = lastMoves[0][idx]
+        gBoard[currMove.i][currMove.j].isShown = false
+        const elCurrCell = document.querySelector(`.cell.cell-${currMove.i}-${currMove.j}`)
+        unRenderCell(elCurrCell)
+        if (gBoard[currMove.i][currMove.j].isMine) {
+            gLevel.LIVES++
+            createLife()
+        }
+    }
+}
+
+function mineExt() {
+    
+}
