@@ -11,14 +11,16 @@ var gElHint
 var gIsMinesManual
 var gMines = 0
 var gMinesLoc = []
-var input
-var oldState = []
+var gInput
+var gOldState = []
 var gIsWhiteMode
 var gIsMegaHint
-var megaHints = []
-var moves = []
-var lastMove = []
-var expandMoves = []
+var gMegaHints = []
+var gMoves = []
+var gLastMove = []
+var gExpandMoves = []
+var gMinesExt
+var gSevenBoomCount = 1
 
 
 const gLevel = {
@@ -45,9 +47,9 @@ function initGame() {
     gLevel.SAFE = 3
     gLevel.MEGAHINT = 1
     gGame.secsPassed = 0
-    expandMoves = []
+    gExpandMoves = []
     gMinesLoc = []
-    moves = []
+    gMoves = []
     gMines = 0
     gGame.isWin = false
     gIsGameStarted = false
@@ -83,31 +85,23 @@ function cellClicked(elCell, i, j) {
     if (gIsMinesManual) {
         gBoard = buildBoard(gLevel.SIZE)
         positionMinesManually(elCell, i, j)
-        if (gMines <= gLevel.MINES) {
-            gMinesLoc.push({ i, j })
-            elCell.innerHTML = MINE
-            gMines++
-            if (gMines === gLevel.MINES) {
-                placeMines()
-                return
-            }
-        }
+        if (gMines < gLevel.MINES) placeMinesManually(elCell, i, j)
     }
     if (gIsMegaHint && gLevel.MEGAHINT) {
-        megaHints.push({ i, j })
-        if (megaHints.length === 2) actMegaHint()
+        gMegaHints.push({ i, j })
+        if (gMegaHints.length === 2) actMegaHint()
     }
-    if (!gGame.isOn) return
     if (!gIsGameStarted) {
         startTimer()
         while (gBoard[i][j].isMine) initGame()
     }
     gIsGameStarted = true
+    if (!gGame.isOn) return
+    if (gBoard[i][j].isMarked) return
     if (gIsHint) {
         actHint(gBoard, i, j)
         return
     }
-    if (gBoard[i][j].isMarked) return
     renderCell(elCell, { i, j })
     if (gBoard[i][j].isMine) {
         getIdx(i, j)
@@ -121,17 +115,16 @@ function cellClicked(elCell, i, j) {
     }
     if (!gBoard[i][j].minesAroundCount) {
         expandCell(i, j)
-        moves.push(expandMoves.splice(0, expandMoves.length - 1))
-        expandMoves = []
-        lastMove = []
+        gMoves.push(gExpandMoves.splice(0, gExpandMoves.length - 1))
+        gExpandMoves = []
+        gLastMove = []
     }
     else {
-        const elCurrCell = document.querySelector(`.cell.cell-${i}-${j}`)
-        renderCell(elCurrCell, { i, j })
+        renderCell(elCell, { i, j })
         getIdx(i, j)
         pushIdx()
         gBoard[i][j].isShown = true
-        elCurrCell.classList.add('shown')
+        elCell.classList.add('shown')
         gGame.shownCount++
     }
     isWin()
@@ -141,16 +134,15 @@ function expandCell(i, j) {
     var negs = getNegs(gBoard, i, j)
     for (var idx = 0; idx < negs.length; idx++) {
         const currNeg = negs[idx]
-        const elCurrCell = document.querySelector(`.cell.cell-${currNeg.i}-${currNeg.j}`)
+        const elCurrCell = selectCell(currNeg.i,currNeg.j)
         if (!gBoard[currNeg.i][currNeg.j].isShown) gGame.shownCount++
         if (!gBoard[currNeg.i][currNeg.j].isMine) {
             renderCell(elCurrCell, { i: currNeg.i, j: currNeg.j })
-            expandMoves.push({ i: currNeg.i, j: currNeg.j })
+            gExpandMoves.push({ i: currNeg.i, j: currNeg.j })
             gBoard[currNeg.i][currNeg.j].isShown = true
             elCurrCell.classList.add('shown')
             if (currNeg && !gBoard[currNeg.i][currNeg.j].minesAroundCount) {
                 expandCell(currNeg.i, currNeg.j)
-
             }
         }
         getIdx(i, j)
@@ -174,17 +166,13 @@ function flagCell(elCell) {
             const cellCoord = getCellCoord(elCell.classList[1])
             if (gBoard[cellCoord.i][cellCoord.j].isShown && !gBoard[cellCoord.i][cellCoord.j].isMine) return
             if (!gGame.isOn) return
-            elCell.classList.toggle('flagged')
             if (!gBoard[cellCoord.i][cellCoord.j].isMarked) {
                 elCell.innerText = FLAG
                 gGame.markedCount++
                 isWin()
             } else {
-                if (gBoard[cellCoord.i][cellCoord.j].isShown) {
-                    renderCell(elCell, cellCoord)
-                } else {
-                    elCell.innerHTML = ''
-                }
+                if (gBoard[cellCoord.i][cellCoord.j].isShown) renderCell(elCell, cellCoord)
+                else elCell.innerHTML = ''
                 gGame.markedCount--
             }
             gBoard[cellCoord.i][cellCoord.j].isMarked = !gBoard[cellCoord.i][cellCoord.j].isMarked
@@ -225,7 +213,7 @@ function onRestart(elBtn) {
 function showAllCells() {
     for (var i = 0; i < gLevel.SIZE; i++) {
         for (var j = 0; j < gLevel.SIZE; j++) {
-            const elCurrCell = document.querySelector(`.cell.cell-${i}-${j}`)
+            const elCurrCell = selectCell(i,j)
             if (!elCurrCell.innerText) {
                 renderCell(elCurrCell, { i, j })
                 elCurrCell.classList.add('shown')
@@ -250,11 +238,3 @@ function resetGame() {
     gGame.shownCount = 0
     gGame.markedCount = 0
 }
-
-/* Left to do:
-
--- 7BOOM
-
--- MINE EXTERMINATOR
-
-*/

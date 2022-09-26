@@ -99,6 +99,10 @@ function getCellCoord(strCellId) {
     return coord;
 }
 
+function selectCell(row,col){
+    return document.querySelector(`.cell.cell-${row}-${col}`)
+}
+
 function startTimer() {
     gTimer = setInterval(countTime, 1000)
 }
